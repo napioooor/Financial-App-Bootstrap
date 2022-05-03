@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Najlepsza aplikacja finansowa - dodaj przych&oacute;d</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@300;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <p>
+                <a href="add income.html">Dodaj przych&oacute;d</a>
+            </p>
+            <p>
+                <a href="add expense.html">Dodaj wydatek</a>
+            </p>
+            <p>
+                <a href="browse balance.html">Przegl&aogon;daj bilans</a>
+            </p>
+            <p>
+                <a href="settings.html">Ustawienia</a>
+            </p>
+            <p>
+                <a href="main page.html">Wyloguj si&eogon;</a>
+            </p>
+        </nav>
+    </header>
+    <section class="add_value">
+        <H2>Dodaj przych&oacute;d:</H2>
+        <form action="user menu.html">
+            <table>
+                <tr>
+                    <td><label for="amount">Kwota:</label></td>
+                    <td><input type="number" id="amount" required></td>
+                </tr>
+                <tr>
+                    <td><label for="date">Data:</label></td>
+                    <td><input type="date" id="date" required></td>
+                </tr>
+                <tr>
+                    <td><label for="category">Kategoria:</label></td>
+                    <td><select id="category" required>
+                            <option>Wynagrodzenie</option>
+                            <option>Odsetki bankowe</option>
+                            <option>Sprzeda&zdot; na Allegro</option>
+                            <option>Inne</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="comment">Komentarz <i style="color: gray;">(opcjonalnie)</i>:</label></td>
+                    <td><textarea name="" id="comment" cols="30" rows="5"></textarea></td>
+                </tr>
+            </table>
+            <button type="submit">Zatwierd&zacute;</button>
+            <a href="user menu.html">Anuluj</a>
+        </form>
+    </section>
+</body>
+
+</html>
