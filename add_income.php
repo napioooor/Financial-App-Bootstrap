@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if(!isset($_SESSION['logged_in'])){
+        header('Location: index.php');
+        exit();
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +13,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Najlepsza aplikacja finansowa - menu u&zdot;ytkownika</title>
+    <title>Najlepsza aplikacja finansowa - dodaj przych&oacute;d</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
@@ -29,7 +37,7 @@
                             </svg> Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="add income.html"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                        <a class="nav-link" href="add_income.php"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                 height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                                 <path
@@ -37,7 +45,7 @@
                             </svg> Dodaj przych&oacute;d</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="add expense.html"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                        <a class="nav-link" href="add_expense.php"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                 height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                                 <path
@@ -45,7 +53,7 @@
                             </svg> Dodaj wydatek</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="browse balance.html"><svg xmlns="http://www.w3.org/2000/svg"
+                        <a class="nav-link" href="browse_balance.php"><svg xmlns="http://www.w3.org/2000/svg"
                                 width="16" height="16" fill="currentColor" class="bi bi-clipboard-data"
                                 viewBox="0 0 16 16">
                                 <path
@@ -61,7 +69,7 @@
             <div class="collapse navbar-collapse col-lg-3" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="settings.html"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                        <a class="nav-link" href="settings.php"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                 height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                                 <path
                                     d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
@@ -70,7 +78,7 @@
                             </svg> Ustawienia</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="main page.html"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                        <a class="nav-link" href="logout.php"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                 height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"
                                     d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
@@ -83,8 +91,37 @@
         </nav>
     </header>
     <section class="container bg-light text-dark d-flex flex-column align-items-center">
-        <h1 class="row">Witaj, ktosiu!</h1>
-        <h2 class="row">Aby kontynuowa&cacute; wybierz opcj&eogon; z menu na g&oacute;rze.</h2>
+        <H2 class="my-4">Dodaj przych&oacute;d:</H2>
+        <form action="user menu.php">
+            <table>
+                <tr>
+                    <td><label for="amount">Kwota:</label></td>
+                    <td><input type="number" id="amount" class="form-control m-1" required></td>
+                </tr>
+                <tr>
+                    <td><label for="date">Data:</label></td>
+                    <td><input type="date" id="date" class="form-control m-1" required></td>
+                </tr>
+                <tr>
+                    <td><label for="category">Kategoria:</label></td>
+                    <td><select id="category" class="form-control m-1" required>
+                            <option>Wynagrodzenie</option>
+                            <option>Odsetki bankowe</option>
+                            <option>Sprzeda&zdot; na Allegro</option>
+                            <option>Inne</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="comment">Komentarz <i style="color: gray;">(opcjonalnie)</i>:</label></td>
+                    <td><textarea name="" id="comment" cols="30" rows="3" class="form-control m-1"></textarea></td>
+                </tr>
+            </table>
+            <div class="d-flex flex-row justify-content-center align-items-center mt-3">
+                <button type="submit" class="btn btn-dark">Zatwierd&zacute;</button>
+                <a href="user menu.php" class="ml-3">Anuluj</a>
+            </div>
+        </form>
     </section>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
