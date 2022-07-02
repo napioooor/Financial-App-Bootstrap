@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
+        header('Location: user_menu.php');
+        exit();
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,19 +22,22 @@
 <body>
     <main class="container bg-light text-dark d-flex flex-column align-items-center w-50 my-5 py-5 rounded-lg">
         <h1 class="my-4">Witaj w najlepszej aplikacji finansowej!</h1>
-        <form action="user menu.html" class="mt-3">
+        <form action="log_in.php" class="mt-3" method="post">
             <div class="form-group">
-                <input type="email" class="form-control" aria-describedby="emailHelp" required placeholder="E-mail">
+                <input name="email" type="email" class="form-control" aria-describedby="emailHelp" required placeholder="E-mail">
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" required minlength="3" maxlength="18"
+                <input name="password" type="password" class="form-control" required minlength="3" maxlength="18"
                     placeholder="Has&lstrok;o">
             </div>
             <button type="login" class="btn btn-dark">Zaloguj</button>
             <p class="my-3">
-                <a href="register.html">Nie masz konta? Za&lstrok;&oacute;&zdot; nowe.</a>
+                <a href="register.php">Nie masz konta? Za&lstrok;&oacute;&zdot; nowe.</a>
             </p>
         </form>
+        <?php
+            if(isset($_SESSION['error'])) echo $_SESSION['error'];
+        ?>
     </main>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

@@ -4,3 +4,8 @@ body {
     background-attachment: fixed;
     background-size: 100% 100%;
   }
+
+  .error{
+    color: red;
+    margin: 10px 0px;
+}
