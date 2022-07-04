@@ -72,6 +72,26 @@
                 
                 if($everything_fine == true){
                     if($connection -> query("INSERT INTO users VALUES (NULL, '$nick', '$email', '$password_hash')")){
+                        $result = $connection -> query("SELECT id FROM users WHERE email='$email'");
+
+                        $id = $result -> fetch_assoc();
+                        
+                        $table1 = 'expense_category_default';
+                        $table2 = 'income_category_default';
+                        $table3 = 'payment_default';
+
+                        $new_table1 = 'expense_category_user_'.$id['id'];
+                        $new_table2 = 'income_category_user_'.$id['id'];
+                        $new_table3 = 'payment_user_'.$id['id'];
+
+                        $connection -> query("CREATE TABLE $new_table1 LIKE $table1");
+                        $connection -> query("CREATE TABLE $new_table2 LIKE $table2");
+                        $connection -> query("CREATE TABLE $new_table3 LIKE $table3");
+
+                        $connection -> query("INSERT $new_table1 SELECT * FROM $table1");
+                        $connection -> query("INSERT $new_table2 SELECT * FROM $table2");
+                        $connection -> query("INSERT $new_table3 SELECT * FROM $table3");
+                        
                         $_SESSION['success'] = true;
                         header('Location: welcome.php');
                     } else throw new Exception($connection -> error);
