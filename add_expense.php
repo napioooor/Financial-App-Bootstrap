@@ -117,19 +117,19 @@
     </header>
     <section class="container bg-light text-dark d-flex flex-column align-items-center">
         <H2 class="my-4">Dodaj wydatek:</H2>
-        <form method="post">
+        <form action="push_expense.php" method="post">
             <table>
                 <tr>
                     <td><label for="amount">Kwota:</label></td>
-                    <td><input type="number" id="amount" class="form-control m-1" required></td>
+                    <td><input name="amount" type="number" id="amount" class="form-control m-1" required></td>
                 </tr>
                 <tr>
                     <td><label for="date">Data:</label></td>
-                    <td><input type="date" id="date" class="form-control m-1" required></td>
+                    <td><input name="date" type="date" id="date" class="form-control m-1" required></td>
                 </tr>
                 <tr>
                     <td><label for="payment">Spos&oacute;b p&lstrok;atno&sacute;ci:</label></td>
-                    <td><select id="payment" class="form-control m-1" required>
+                    <td><select name="payment" id="payment" class="form-control m-1" required>
                             <?php
                                 foreach($payments as $payment){
                                     echo "<option>{$payment[0]}</option>";
@@ -139,7 +139,7 @@
                 </tr>
                 <tr>
                     <td><label for="category">Kategoria:</label></td>
-                    <td><select id="category" class="form-control m-1" required>
+                    <td><select name="category" id="category" class="form-control m-1" required>
                             <?php
                                 foreach($categories as $category){
                                     echo "<option>{$category[0]}</option>";
@@ -149,7 +149,7 @@
                 </tr>
                 <tr>
                     <td><label for="comment">Komentarz <i style="color: gray;">(opcjonalnie)</i>:</label></td>
-                    <td><textarea name="" id="comment" cols="30" rows="3" class="form-control m-1"></textarea></td>
+                    <td><textarea name="comment" id="comment" cols="30" rows="3" class="form-control m-1"></textarea></td>
                 </tr>
             </table>
             <div class="d-flex flex-row justify-content-center align-items-center mt-3">

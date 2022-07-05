@@ -93,6 +93,11 @@
     <section class="container bg-light text-dark d-flex flex-column align-items-center">
         <h1 class="row">Witaj, <?php echo $_SESSION['nick']?>!</h1>
         <h2 class="row">Aby kontynuowa&cacute; wybierz opcj&eogon; z menu na g&oacute;rze.</h2>
+        <?php
+            if(isset($_SESSION["success"])){
+                echo $_SESSION["success"];
+                unset($_SESSION["success"]);
+            }?>
     </section>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
