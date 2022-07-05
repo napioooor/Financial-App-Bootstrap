@@ -5,6 +5,31 @@
         header('Location: index.php');
         exit();
     }
+
+    require_once "connect.php";
+    mysqli_report(MYSQLI_REPORT_STRICT);
+
+    try{
+        $connection = new mysqli($host, $db_user, $db_password, $db_name);
+        if($connection -> connect_errno != 0) {
+            throw new Exception(mysqli_connect_errno());
+        } else {
+            $expense_table = 'expense_category_user_'.$_SESSION['id'];
+
+            $result = $connection -> query("SELECT name FROM $expense_table");
+            $categories = $result -> fetch_all();
+            
+            $payment_table = 'payment_user_'.$_SESSION['id'];
+
+            $result = $connection -> query("SELECT name FROM $payment_table");
+            $payments = $result -> fetch_all();
+
+            $connection -> close();
+        }
+    } catch(Exception $e){
+        echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności!</span>';
+        echo '<br>Informacja dev: '.$e;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +47,7 @@
 <body>
     <header class="container">
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark row">
-            <a class="navbar-brand mb-0 h1 col-lg-1" href="#">NAF.pl</a>
+            <a class="navbar-brand mb-0 h1 col-lg-1" href="user_menu.php">NAF.pl</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -30,7 +55,7 @@
             <div class="collapse navbar-collapse col-lg-8" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        <a class="nav-link" href="user_menu.php"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
                                 <path
                                     d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
@@ -92,7 +117,7 @@
     </header>
     <section class="container bg-light text-dark d-flex flex-column align-items-center">
         <H2 class="my-4">Dodaj wydatek:</H2>
-        <form action="user menu.php">
+        <form method="post">
             <table>
                 <tr>
                     <td><label for="amount">Kwota:</label></td>
@@ -105,32 +130,20 @@
                 <tr>
                     <td><label for="payment">Spos&oacute;b p&lstrok;atno&sacute;ci:</label></td>
                     <td><select id="payment" class="form-control m-1" required>
-                            <option>Got&oacute;wka</option>
-                            <option>Karta debetowa</option>
-                            <option>Karta kredytowa</option>
+                            <?php
+                                foreach($payments as $payment){
+                                    echo "<option>{$payment[0]}</option>";
+                                } ?>
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <td><label for="category">Kategoria:</label></td>
                     <td><select id="category" class="form-control m-1" required>
-                            <option>Jedzenie</option>
-                            <option>Mieszkanie</option>
-                            <option>Transport</option>
-                            <option>Telekomunikacja</option>
-                            <option>Opieka zdrowotna</option>
-                            <option>Ubranie</option>
-                            <option>Higiena</option>
-                            <option>Dzieci</option>
-                            <option>Rozrywka</option>
-                            <option>Wycieczka</option>
-                            <option>Szkolenia</option>
-                            <option>Ksi&aogon;&zdot;ki</option>
-                            <option>Oszcz&eogon;dno&sacute;ci</option>
-                            <option>Na z&lstrok;ot&aogon; jesie&nacute;, czyli emerytur&eogon;</option>
-                            <option>Sp&lstrok;ata d&lstrok;ug&oacute;w</option>
-                            <option>Datowizna</option>
-                            <option>Inne wydatki</option>
+                            <?php
+                                foreach($categories as $category){
+                                    echo "<option>{$category[0]}</option>";
+                                } ?>
                         </select>
                     </td>
                 </tr>
