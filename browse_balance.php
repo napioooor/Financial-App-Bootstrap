@@ -5,6 +5,8 @@
         header('Location: index.php');
         exit();
     }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -103,20 +105,125 @@
                             </svg> Okres:</label>
                     </td>
                     <td>
-                        <select id="period" class="form-control m-1">
-                            <option>Bierz&aogon;cy miesi&aogon;c</option>
-                            <option>Poprzedni miesi&aogon;c</option>
-                            <option>Bierz&aogon;cy rok</option>
-                            <option>Niestandardowy</option>
-                        </select>
+                        <form method="post" action="">
+                            <select name="period" id="period" class="form-control m-1" onchange='this.form.submit()'>
+                                <option></option>
+                                <option value="1">Bierz&aogon;cy miesi&aogon;c</option>
+                                <option value="2">Poprzedni miesi&aogon;c</option>
+                                <option value="3">Bierz&aogon;cy rok</option>
+                                <option value="4">Niestandardowy</option>
+                            </select>
+                            <?php 
+                                if(isset($_POST['period']) && $_POST['period'] == 4)
+                                    echo '<input type="date" name="date1"><input type="date" name="date2" onchange="this.form.submit()">';                                    
+                            ?>
+                        </form> 
                     </td>
                 </tr>
             </table>
         </div>
-
     </section>
     <section class="container bg-light text-dark d-flex flex-column align-items-center">
-        <h1>Tu kiedy&sacute; wy&sacute;wietlony b&eogon;dzie tw&oacute;j bilans.</h1>
+        <table class="table table-striped table-bordered table-hover table-responsive-lg">
+            <thead class="bg-dark text-light">
+                <tr>
+                    <td><b>Rodzaj transakcji</b></td>
+                    <td><b>Kwota</b></td>
+                    <td><b>Data transakcji</b></td>
+                    <td><b>Kategoria</b></td>
+                    <td><b>Rodzaj p&lstrok;atno&sacute;ci</b></td>
+                    <td><b>Komentarz</b></td>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    require_once "connect.php";
+                    mysqli_report(MYSQLI_REPORT_STRICT);
+                                        
+                    try {
+                        $connection = new mysqli($host, $db_user, $db_password, $db_name);
+                                        
+                        if ($connection -> connect_errno != 0){
+                            throw new Exception(mysqli_connect_errno());
+                        } else {
+                            if(isset($_POST['period'])){
+                                $date1 = "";
+                                $date2 = "";
+
+                                if($_POST['period'] == 1){
+                                    $date1 = date("Y-m-01");
+                                    $date2 = date('Y-m-01', strtotime("+1 months", strtotime($date1)));
+
+                                    echo "<h2>Okres: ".$date1." do ".$date2."</h2>";
+                                } else if($_POST['period'] == 2){
+                                    $date2 = date("Y-m-01");
+                                    $date1 = date('Y-m-01', strtotime("-1 months", strtotime($date2)));
+
+                                    echo "<h2>Okres: ".$date1." do ".$date2."</h2>";
+                                } else if($_POST['period'] == 3){                                    
+                                    $date1 = date("Y-01-01");
+                                    $date2 = date("Y-m-d");
+
+                                    echo "<h2>Okres: ".$date1." do ".$date2."</h2>";
+                                } else if(isset($_POST['date2'])){                                    
+                                    $date1 = $_POST['date1'];
+                                    $date2 = $_POST['date2'];
+
+                                    echo "<h2>Okres: ".$date1." do ".$date2."</h2>";
+                                }
+
+                                $id = $_SESSION['id'];                    
+                
+                                $result = $connection -> query("SELECT amount, category, income_date, dummy, comment FROM incomes 
+                                WHERE user_id = $id AND DATE(income_date) BETWEEN DATE('$date1') AND DATE('$date2') ORDER BY income_date DESC");
+                                $incomes = $result -> fetch_all();
+
+                                $result = $connection -> query("SELECT amount, category, expense_date, payment, comment FROM expenses 
+                                WHERE user_id = $id AND DATE(expense_date) BETWEEN DATE('$date1') AND DATE('$date2') ORDER BY expense_date DESC");
+                                $expenses = $result -> fetch_all();
+
+                                $finances = array_merge($incomes, $expenses);
+
+                                $dates = array_column($finances, 2);
+
+                                array_multisort($dates, SORT_DESC, $finances);
+
+                                $sum = 0;
+
+                                foreach($finances as $finance){
+                                    if($finance[3] == NULL){
+                                        echo "<tr><td>Przych&oacute;d</td><td>{$finance[0]}</td><td>{$finance[2]}</td><td>{$finance[1]}</td><td>-</td><td>{$finance[4]}</td></tr>";
+
+                                        $sum += $finance[0];
+                                    } else {
+                                        echo "<tr><td>Wydatek</td><td>-{$finance[0]}</td><td>{$finance[2]}</td><td>{$finance[1]}</td><td>{$finance[3]}</td><td>{$finance[4]}</td></tr>";
+
+                                        $sum -= $finance[0];
+                                    }
+                                }
+                            }                            
+                
+                            $connection -> close();
+                        }
+                    } catch(Exception $e){
+                        echo '<span class="error">Błąd serwera! Przepraszamy za niedogodności i prosimy o wizytę w innym terminie!</span>';
+                        echo '<br />Informacja developerska: '.$e;
+                    }
+                ?>
+            </tbody>
+            <tfoot class="bg-dark text-light">
+                <tr>
+                    <td><b>Suma</b></td>
+                    <td><?php if(isset($sum)) echo $sum;?></td>
+                </tr>
+            </tfoot>
+        </table>
+        <?php if(isset($sum)){
+            if($sum > 0)
+                echo '<h4 class="text-success">Gratulacje. &Sacute;wietnie zarz&aogon;dzasz finansami!</h4>';
+            else 
+                echo '<h4 class="text-danger">Uwa&zdot;aj, wpadasz w d&lstrok;ugi!</h4>';
+        }?>
     </section>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

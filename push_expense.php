@@ -20,7 +20,7 @@
 			$comment = htmlentities($comment, ENT_QUOTES, "UTF-8");
 
 			if($connection -> query("INSERT INTO expenses VALUES (NULL, '$id', '$amount', '$date', '$category', '$payment', '$comment')")){
-				$_SESSION['success'] = "<h3 class='row text-success'>Pomy&sacute;lnie dodano wydatek!</h3>";
+				$_SESSION['success'] = "<h2 class='row text-success'>Pomy&sacute;lnie dodano wydatek!</h2>";
 
 				header('Location: user_menu.php');
 			} else {

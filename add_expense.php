@@ -154,7 +154,7 @@
             </table>
             <div class="d-flex flex-row justify-content-center align-items-center mt-3">
                 <button type="submit" class="btn btn-dark">Zatwierd&zacute;</button>
-                <a href="user menu.php" class="ml-3">Anuluj</a>
+                <a href="user_menu.php" class="ml-3">Anuluj</a>
             </div>
         </form>
     </section>
