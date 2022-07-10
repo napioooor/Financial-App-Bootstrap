@@ -1,7 +1,7 @@
 <?php
     session_start();
 
-    if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
+    if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true){
         header('Location: user_menu.php');
         exit();
     }
