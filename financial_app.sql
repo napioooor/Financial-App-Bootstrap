@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 10 Lip 2022, 17:39
+-- Czas generowania: 18 Lip 2022, 21:18
 -- Wersja serwera: 10.4.24-MariaDB
 -- Wersja PHP: 8.1.6
 
@@ -83,7 +83,6 @@ CREATE TABLE `incomes` (
   `amount` decimal(8,2) NOT NULL DEFAULT 0.00,
   `category` varchar(50) COLLATE utf8_polish_ci NOT NULL,
   `income_date` date NOT NULL DEFAULT current_timestamp(),
-  `dummy` int(11) DEFAULT NULL,
   `comment` varchar(250) COLLATE utf8_polish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
@@ -137,7 +136,7 @@ INSERT INTO `payment_default` (`id`, `name`) VALUES
 CREATE TABLE `users` (
   `id` int(11) UNSIGNED NOT NULL,
   `nick` varchar(20) COLLATE utf8_polish_ci NOT NULL,
-  `email` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8 NOT NULL,
   `password` varchar(255) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
@@ -190,7 +189,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT dla tabeli `expenses`
 --
 ALTER TABLE `expenses`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT dla tabeli `expense_category_default`
@@ -202,7 +201,7 @@ ALTER TABLE `expense_category_default`
 -- AUTO_INCREMENT dla tabeli `incomes`
 --
 ALTER TABLE `incomes`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT dla tabeli `income_category_default`
@@ -220,7 +219,7 @@ ALTER TABLE `payment_default`
 -- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

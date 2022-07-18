@@ -1,6 +1,6 @@
 <?php
-    $host = "localhost";
-    $db_user = "root";
-    $db_password = "";
-    $db_name = "financial_app";    
+    $host = "budget.jan-napiorkowski.profesjonalnyprogramista.pl.mysql.dhosting.pl";
+    $db_user = "me7ati_budgetja";
+    $db_password = "Eiv4Ahngoa8A";
+    $db_name = "aew9ah_budgetja";    
 ?>

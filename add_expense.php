@@ -121,11 +121,11 @@
             <table>
                 <tr>
                     <td><label for="amount">Kwota:</label></td>
-                    <td><input name="amount" type="number" id="amount" class="form-control m-1" required></td>
+                    <td><input name="amount" type="number" id="amount" class="form-control m-1" required step="0.01"></td>
                 </tr>
                 <tr>
                     <td><label for="date">Data:</label></td>
-                    <td><input name="date" type="date" id="date" class="form-control m-1" required></td>
+                    <td><input name="date" type="date" id="date" class="form-control m-1" required value="<?php echo date('Y-m-d'); ?>"></td>
                 </tr>
                 <tr>
                     <td><label for="payment">Spos&oacute;b p&lstrok;atno&sacute;ci:</label></td>
