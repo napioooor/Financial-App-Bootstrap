@@ -5,8 +5,6 @@
         header('Location: index.php');
         exit();
     }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +17,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
 </head>
 
 <body>
@@ -91,7 +90,7 @@
                 </ul>
             </div>
         </nav>
-    </header>
+    </header>    
     <section class="container bg-light text-dark d-flex flex-row justify-content-end align-items-center">
         <div class="my-3">
             <table>
@@ -105,21 +104,38 @@
                             </svg> Okres:</label>
                     </td>
                     <td>
-                        <form method="post" action="">
+                        <form method="post" action="" name="choice">
                             <?php
                                 if(isset($_POST['period'])) $selected = $_POST['period'];
                             ?>
-                            <select name="period" id="period" class="form-control m-1" onchange='this.form.submit()'>
+                            <select name="period" id="period" class="form-control m-1" onchange='onChangeFun()'>
                                 <option value="" disabled hidden selected>Wybierz tutaj</option>
                                 <option <?php if(isset($selected) && $selected == 1){echo("selected");}?> value="1">Bierz&aogon;cy miesi&aogon;c</option>
                                 <option <?php if(isset($selected) && $selected == 2){echo("selected");}?> value="2">Poprzedni miesi&aogon;c</option>
                                 <option <?php if(isset($selected) && $selected == 3){echo("selected");}?> value="3">Bierz&aogon;cy rok</option>
                                 <option <?php if(isset($selected) && $selected == 4){echo("selected");}?> value="4">Niestandardowy</option>
                             </select>
-                            <?php 
-                                if(isset($_POST['period']) && $_POST['period'] == 4)
-                                    echo '<input type="date" name="date1"><input type="date" name="date2" onchange="this.form.submit()">';                                    
-                            ?>
+                            <div class="modal" tabindex="-1" id="myModal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Wybierz okres:</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form method="post" action="">
+                                            <div class="modal-body d-flex flex-column align-items-center">
+                                                <p>Od: <input type="date" name="date1"> Do: <input type="date" name="date2"></p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                                                <button type="submit" class="btn btn-primary">Potwierd&zacute;</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </form> 
                     </td>
                 </tr>
@@ -144,24 +160,22 @@
                         if($_POST['period'] == 1){
                             $date1 = date("Y-m-01");
                             $date2 = date('Y-m-01', strtotime("+1 months", strtotime($date1)));
-
-                            echo "<h2>Okres: ".$date1." do ".$date2."</h2>";
                         } else if($_POST['period'] == 2){
                             $date2 = date("Y-m-01");
                             $date1 = date('Y-m-01', strtotime("-1 months", strtotime($date2)));
-
-                            echo "<h2>Okres: ".$date1." do ".$date2."</h2>";
                         } else if($_POST['period'] == 3){                                    
                             $date1 = date("Y-01-01");
                             $date2 = date("Y-m-d");
-
-                            echo "<h2>Okres: ".$date1." do ".$date2."</h2>";
-                        } else if(isset($_POST['date2'])){                                    
-                            $date1 = $_POST['date1'];
-                            $date2 = $_POST['date2'];
-
-                            echo "<h2>Okres: ".$date1." do ".$date2."</h2>";
+                        } else if($_POST['period'] == 4){
+                            if($_POST['date1'] < $_POST['date2']){
+                                $date1 = $_POST['date1'];
+                                $date2 = $_POST['date2'];
+                            } else {
+                                $date1 = $_POST['date2'];
+                                $date2 = $_POST['date1'];
+                            }
                         }
+                        echo "<h2>Okres: ".$date1." do ".$date2."</h2>";
 
                         $id = $_SESSION['id'];                    
         
@@ -198,13 +212,13 @@
                         <tbody>';
 
                         foreach($incomes as $income){
-                            echo "<tr><td>Przych&oacute;d</td><td>{$income[0]}</td><td>{$income[2]}</td><td>{$income[1]}</td><td>-</td><td>{$income[3]}</td></tr>";
+                            echo "<tr><td>Przych&oacute;d</td><td class='text-success'>{$income[0]}</td><td>{$income[2]}</td><td>{$income[1]}</td><td>-</td><td>{$income[3]}</td></tr>";
 
                             $sum += $income[0];
                         } 
 
                         foreach($expenses as $expense) {
-                            echo "<tr><td>Wydatek</td><td>-{$expense[0]}</td><td>{$expense[2]}</td><td>{$expense[1]}</td><td>{$expense[3]}</td><td>{$expense[4]}</td></tr>";
+                            echo "<tr><td>Wydatek</td><td class='text-danger'>-{$expense[0]}</td><td>{$expense[2]}</td><td>{$expense[1]}</td><td>{$expense[3]}</td><td>{$expense[4]}</td></tr>";
 
                             $sum -= $expense[0];
                         }
@@ -219,12 +233,13 @@
                             </tfoot>
                         </table>';
 
-                        if(isset($sum)){
-                            if($sum >= 0)
-                                echo '<h4 class="text-success">Gratulacje. &Sacute;wietnie zarz&aogon;dzasz finansami!</h4>';
-                            else 
-                                echo '<h4 class="text-danger">Uwa&zdot;aj, wpadasz w d&lstrok;ugi!</h4>';
-                        }
+                        $result = $connection -> query("SELECT DISTINCT category, SUM(amount) FROM incomes 
+                        WHERE user_id = $id AND DATE(income_date) BETWEEN DATE('$date1') AND DATE('$date2') GROUP BY category ORDER BY SUM(amount) DESC");
+                        $income_sums = $result -> fetch_all();
+
+                        $result = $connection -> query("SELECT DISTINCT category, SUM(amount) FROM expenses 
+                        WHERE user_id = $id AND DATE(expense_date) BETWEEN DATE('$date1') AND DATE('$date2') GROUP BY category ORDER BY SUM(amount) DESC");
+                        $expense_sums = $result -> fetch_all();
                     }   
                     $connection -> close();
                 }
@@ -233,6 +248,64 @@
                 echo '<br />Informacja developerska: '.$e;
             }
         ?>
+        <script type="text/javascript">
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+
+                var data = google.visualization.arrayToDataTable([
+                ['Kategoria', 'Kwota'],
+                <?php
+                    foreach($income_sums as $income_sum){
+                        echo "['".$income_sum[0]."', ".$income_sum[1]."],";
+                    }
+                ?>
+                ]);
+
+                var options = {
+                title: 'Przychody'
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart1'));
+
+                chart.draw(data, options);
+            }
+        </script>
+        <div id="piechart1" style="width: 900px; height: 500px;"></div>
+        <script type="text/javascript">
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+
+                var data = google.visualization.arrayToDataTable([
+                ['Kategoria', 'Kwota'],
+                <?php
+                    foreach($expense_sums as $expense_sum){
+                        echo "['".$expense_sum[0]."', ".$expense_sum[1]."],";
+                    }
+                ?>
+                ]);
+
+                var options = {
+                title: 'Wydatki'
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
+
+                chart.draw(data, options);
+            }
+        </script>
+        <div id="piechart2" style="width: 900px; height: 500px;"></div><br>
+        <?php
+            if(isset($sum)){
+                if($sum >= 0)
+                    echo '<h4 class="text-success">Gratulacje. &Sacute;wietnie zarz&aogon;dzasz finansami!</h4><br>';
+                else 
+                    echo '<h4 class="text-danger">Uwa&zdot;aj, wpadasz w d&lstrok;ugi!</h4><br>';
+            }
+        ?>        
     </section>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -240,6 +313,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>
