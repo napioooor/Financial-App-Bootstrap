@@ -272,7 +272,11 @@
                 chart.draw(data, options);
             }
         </script>
-        <div id="piechart1" style="width: 900px; height: 500px;"></div>
+        <?php
+            if(isset($income_sums)){
+                echo '<div id="piechart1" style="width: 900px; height: 500px;"></div>';
+            }
+        ?>
         <script type="text/javascript">
             google.charts.load('current', {'packages':['corechart']});
             google.charts.setOnLoadCallback(drawChart);
@@ -297,7 +301,11 @@
                 chart.draw(data, options);
             }
         </script>
-        <div id="piechart2" style="width: 900px; height: 500px;"></div><br>
+        <?php
+            if(isset($expense_sums)){
+                echo '<div id="piechart2" style="width: 900px; height: 500px;"></div>';
+            }
+        ?>
         <?php
             if(isset($sum)){
                 if($sum >= 0)
