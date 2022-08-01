@@ -187,6 +187,11 @@
                         WHERE user_id = $id AND DATE(expense_date) BETWEEN DATE('$date1') AND DATE('$date2') ORDER BY expense_date DESC");
                         $expenses = $result -> fetch_all();
 
+                        if(empty($incomes) && empty($expenses)){
+                            echo '<h4 class="text-danger">Brak danych w tym okresie.</h4><br>';
+                            exit();
+                        }
+
                         $dates_e = array_column($expenses, 2);
 
                         array_multisort($dates_e, SORT_DESC, $expenses);
